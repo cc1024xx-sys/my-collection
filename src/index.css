@@ -50,10 +50,154 @@ body {
   padding-top: max(12px, env(safe-area-inset-top));
 }
 
+.header-home {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
 .header-title {
   margin: 0;
   font-size: 1.25rem;
   font-weight: 700;
+}
+
+.btn-header-backup {
+  flex-shrink: 0;
+  background: var(--surface);
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 6px 12px;
+  font-size: 0.875rem;
+  font-family: inherit;
+  cursor: pointer;
+  min-height: 36px;
+}
+
+.btn-header-backup:active {
+  opacity: 0.85;
+}
+
+/* Backup panel */
+.backup-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0;
+}
+
+.backup-sheet {
+  width: 100%;
+  max-width: 640px;
+  max-height: 85dvh;
+  overflow-y: auto;
+  background: var(--surface);
+  border-radius: 16px 16px 0 0;
+  padding: 20px 16px calc(20px + var(--safe-bottom));
+  -webkit-overflow-scrolling: touch;
+}
+
+.backup-sheet-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.backup-title {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+.backup-hint {
+  margin: 0 0 16px;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.backup-divider {
+  margin: 20px 0 12px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.backup-mode {
+  border: none;
+  margin: 0 0 12px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.backup-mode-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.backup-mode-option input {
+  margin-top: 4px;
+  flex-shrink: 0;
+}
+
+.backup-mode-option span {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.backup-mode-option small {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: normal;
+}
+
+.backup-file-input {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.backup-message {
+  margin: 12px 0 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.backup-message--ok {
+  color: #2d6a4f;
+}
+
+.backup-message--err {
+  color: var(--danger);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .btn-back {
