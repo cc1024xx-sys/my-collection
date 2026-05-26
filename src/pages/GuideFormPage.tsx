@@ -321,7 +321,6 @@ export function GuideFormPage() {
           type="file"
           accept="image/*"
           multiple
-          capture="environment"
           className="hidden-input"
           onChange={handleImagesSelected}
         />
@@ -330,7 +329,7 @@ export function GuideFormPage() {
           className="btn-secondary btn-block"
           onClick={() => fileInputRef.current?.click()}
         >
-          上传图片
+          从相册选择或拍照
         </button>
       </div>
 
