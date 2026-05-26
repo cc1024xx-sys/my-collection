@@ -180,46 +180,62 @@ export function ExperienceSection({ guideId }: ExperienceSectionProps) {
               </button>
             </div>
 
-            <label className="form-label">
-              评分 <span className="form-required">*</span>
-            </label>
-            <StarRating
-              value={rating}
-              onChange={setRating}
-              size="lg"
-            />
+            <div className="experience-form">
+              <div className="experience-form-field">
+                <span className="experience-form-label">
+                  评分 <span className="form-required">*</span>
+                </span>
+                <div className="experience-form-stars">
+                  <StarRating
+                    value={rating}
+                    onChange={setRating}
+                    size="lg"
+                  />
+                </div>
+              </div>
 
-            <label className="form-label" htmlFor="experience-date">
-              体验日期
-            </label>
-            <input
-              id="experience-date"
-              type="date"
-              className="form-input"
-              value={dateValue}
-              onChange={(e) => setDateValue(e.target.value)}
-            />
+              <div className="experience-form-field">
+                <label
+                  className="experience-form-label"
+                  htmlFor="experience-date"
+                >
+                  体验日期
+                </label>
+                <input
+                  id="experience-date"
+                  type="date"
+                  className="experience-form-input"
+                  value={dateValue}
+                  onChange={(e) => setDateValue(e.target.value)}
+                />
+              </div>
 
-            <label className="form-label" htmlFor="experience-content">
-              体验反馈（选填）
-            </label>
-            <textarea
-              id="experience-content"
-              className="form-textarea"
-              rows={4}
-              placeholder="这次感觉如何？有什么想记下来的？"
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-            />
+              <div className="experience-form-field">
+                <label
+                  className="experience-form-label"
+                  htmlFor="experience-content"
+                >
+                  体验反馈（选填）
+                </label>
+                <textarea
+                  id="experience-content"
+                  className="experience-form-textarea"
+                  rows={5}
+                  placeholder="这次感觉如何？有什么想记下来的？"
+                  value={content}
+                  onChange={(e) => setContent(e.target.value)}
+                />
+              </div>
 
-            <button
-              type="button"
-              className="btn-primary btn-block"
-              disabled={saving}
-              onClick={() => void handleSave()}
-            >
-              {saving ? '保存中…' : '保存'}
-            </button>
+              <button
+                type="button"
+                className="btn-primary btn-block experience-form-submit"
+                disabled={saving}
+                onClick={() => void handleSave()}
+              >
+                {saving ? '保存中…' : '保存'}
+              </button>
+            </div>
           </div>
         </div>
       )}
