@@ -28,3 +28,12 @@ export interface GuideImage {
 }
 
 export type GuideInput = Omit<Guide, 'id' | 'createdAt' | 'updatedAt'>
+
+export interface ExperienceFeedback {
+  id: string
+  guideId: string
+  rating: number
+  content: string
+  experiencedAt: number
+  createdAt: number
+}

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db, deleteGuideWithImages, getGuideImages } from '../db'
+import { ExperienceSection } from '../components/ExperienceSection'
 import { formatTagDisplay } from '../utils/tags'
 import { createObjectUrl } from '../utils/image'
 import type { GuideImage } from '../types'
@@ -101,6 +102,8 @@ export function GuideDetailPage() {
           </ul>
         </section>
       )}
+
+      {id && <ExperienceSection guideId={id} />}
     </div>
   )
 }

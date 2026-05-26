@@ -44,7 +44,7 @@ export function BackupPanel() {
     try {
       const result = await importBackup(file, importMode)
       setMessage(
-        `导入成功：${result.guides} 条攻略，${result.images} 张图片。`,
+        `导入成功：${result.guides} 条攻略，${result.images} 张图片，${result.feedbacks} 条体验记录。`,
       )
       if (fileInputRef.current) fileInputRef.current.value = ''
     } catch (e) {

@@ -1,7 +1,7 @@
 import { db } from '../db'
-import type { Guide, GuideImage } from '../types'
+import type { ExperienceFeedback, Guide, GuideImage } from '../types'
 
-export const BACKUP_VERSION = 1
+export const BACKUP_VERSION = 2
 
 export interface BackupImageRecord {
   id: string
@@ -17,6 +17,7 @@ export interface BackupFile {
   exportedAt: number
   guides: Guide[]
   images: BackupImageRecord[]
+  feedbacks: ExperienceFeedback[]
 }
 
 function blobToBase64(blob: Blob): Promise<string> {
@@ -55,6 +56,7 @@ function backupFilename(): string {
 export async function buildBackupFile(): Promise<BackupFile> {
   const guides = await db.guides.toArray()
   const images = await db.images.toArray()
+  const feedbacks = await db.feedbacks.toArray()
   const imageRecords: BackupImageRecord[] = []
 
   for (const img of images) {
@@ -73,6 +75,7 @@ export async function buildBackupFile(): Promise<BackupFile> {
     exportedAt: Date.now(),
     guides,
     images: imageRecords,
+    feedbacks,
   }
 }
 
@@ -118,12 +121,27 @@ function isBackupImage(value: unknown): value is BackupImageRecord {
   )
 }
 
+function isExperienceFeedback(value: unknown): value is ExperienceFeedback {
+  if (!value || typeof value !== 'object') return false
+  const f = value as ExperienceFeedback
+  return (
+    typeof f.id === 'string' &&
+    typeof f.guideId === 'string' &&
+    typeof f.rating === 'number' &&
+    f.rating >= 1 &&
+    f.rating <= 5 &&
+    typeof f.content === 'string' &&
+    typeof f.experiencedAt === 'number' &&
+    typeof f.createdAt === 'number'
+  )
+}
+
 export function parseBackupFile(raw: unknown): BackupFile {
   if (!raw || typeof raw !== 'object') {
     throw new Error('备份文件格式无效')
   }
   const file = raw as BackupFile
-  if (file.version !== BACKUP_VERSION) {
+  if (file.version !== 1 && file.version !== 2) {
     throw new Error(`不支持的备份版本（${file.version}）`)
   }
   if (!Array.isArray(file.guides) || !Array.isArray(file.images)) {
@@ -136,14 +154,30 @@ export function parseBackupFile(raw: unknown): BackupFile {
     throw new Error('图片数据格式不正确')
   }
 
+  const feedbacks = Array.isArray(file.feedbacks) ? file.feedbacks : []
+  if (!feedbacks.every(isExperienceFeedback)) {
+    throw new Error('体验反馈数据格式不正确')
+  }
+
   const guideIds = new Set(file.guides.map((g) => g.id))
   for (const img of file.images) {
     if (!guideIds.has(img.guideId)) {
       throw new Error(`图片 ${img.id} 对应的攻略不存在`)
     }
   }
+  for (const fb of feedbacks) {
+    if (!guideIds.has(fb.guideId)) {
+      throw new Error(`体验记录 ${fb.id} 对应的攻略不存在`)
+    }
+  }
 
-  return file
+  return {
+    version: file.version,
+    exportedAt: file.exportedAt ?? Date.now(),
+    guides: file.guides,
+    images: file.images,
+    feedbacks,
+  }
 }
 
 function toGuideImages(records: BackupImageRecord[]): GuideImage[] {
@@ -162,7 +196,7 @@ export type ImportMode = 'merge' | 'replace'
 export async function importBackup(
   file: File,
   mode: ImportMode,
-): Promise<{ guides: number; images: number }> {
+): Promise<{ guides: number; images: number; feedbacks: number }> {
   let parsed: unknown
   try {
     const text = await file.text()
@@ -174,14 +208,20 @@ export async function importBackup(
   const backup = parseBackupFile(parsed)
   const images = toGuideImages(backup.images)
 
-  await db.transaction('rw', db.guides, db.images, async () => {
+  await db.transaction('rw', db.guides, db.images, db.feedbacks, async () => {
     if (mode === 'replace') {
       await db.images.clear()
+      await db.feedbacks.clear()
       await db.guides.clear()
     }
     await db.guides.bulkPut(backup.guides)
     await db.images.bulkPut(images)
+    await db.feedbacks.bulkPut(backup.feedbacks)
   })
 
-  return { guides: backup.guides.length, images: backup.images.length }
+  return {
+    guides: backup.guides.length,
+    images: backup.images.length,
+    feedbacks: backup.feedbacks.length,
+  }
 }

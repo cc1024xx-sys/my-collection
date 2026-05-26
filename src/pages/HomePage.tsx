@@ -1,15 +1,19 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useLiveQuery } from 'dexie-react-hooks'
-import { db, getAllTags } from '../db'
+import { db, getAllTags, getRatingSummariesForGuides } from '../db'
 import { TagBar } from '../components/TagBar'
 import { GuideCard } from '../components/GuideCard'
 import { Fab } from '../components/Fab'
 import { createObjectUrl } from '../utils/image'
+import type { GuideRatingSummary } from '../db'
 
 export function HomePage() {
   const [selectedTag, setSelectedTag] = useState<string | null>(null)
   const [allTags, setAllTags] = useState<string[]>([])
   const [coverUrls, setCoverUrls] = useState<Record<string, string>>({})
+  const [ratingSummaries, setRatingSummaries] = useState<
+    Record<string, GuideRatingSummary>
+  >({})
 
   const guides = useLiveQuery(
     async () => {
@@ -63,6 +67,20 @@ export function HomePage() {
     }
   }, [guideIds, guides])
 
+  useEffect(() => {
+    if (!guides || guides.length === 0) {
+      setRatingSummaries({})
+      return
+    }
+    let cancelled = false
+    getRatingSummariesForGuides(guides.map((g) => g.id)).then((map) => {
+      if (!cancelled) setRatingSummaries(map)
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [guideIds, guides])
+
   return (
     <div className="home">
       <TagBar
@@ -82,7 +100,11 @@ export function HomePage() {
         <ul className="guide-list">
           {guides.map((guide) => (
             <li key={guide.id}>
-              <GuideCard guide={guide} coverUrl={coverUrls[guide.id]} />
+              <GuideCard
+                guide={guide}
+                coverUrl={coverUrls[guide.id]}
+                ratingSummary={ratingSummaries[guide.id]}
+              />
             </li>
           ))}
         </ul>

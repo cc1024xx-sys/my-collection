@@ -1,13 +1,16 @@
 import { Link } from 'react-router-dom'
 import type { Guide } from '../types'
+import type { GuideRatingSummary } from '../db'
 import { formatTagDisplay } from '../utils/tags'
+import { formatRatingAverage, formatStars } from '../utils/rating'
 
 interface GuideCardProps {
   guide: Guide
   coverUrl?: string
+  ratingSummary?: GuideRatingSummary | null
 }
 
-export function GuideCard({ guide, coverUrl }: GuideCardProps) {
+export function GuideCard({ guide, coverUrl, ratingSummary }: GuideCardProps) {
   const stepCount = guide.steps.length
 
   return (
@@ -32,6 +35,18 @@ export function GuideCard({ guide, coverUrl }: GuideCardProps) {
         )}
         <p className="guide-card-meta">
           {stepCount > 0 ? `${stepCount} 个步骤` : '暂无步骤'}
+          {ratingSummary ? (
+            <>
+              {' · '}
+              <span className="guide-card-rating">
+                {formatStars(Math.round(ratingSummary.average))}{' '}
+                {formatRatingAverage(ratingSummary.average)}（
+                {ratingSummary.count} 条体验）
+              </span>
+            </>
+          ) : (
+            <> · 未体验</>
+          )}
         </p>
       </div>
     </Link>

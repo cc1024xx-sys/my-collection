@@ -328,6 +328,139 @@ body {
   color: var(--text-muted);
 }
 
+.guide-card-rating {
+  color: #b8860b;
+}
+
+/* Star rating */
+.star-rating {
+  display: inline-flex;
+  gap: 2px;
+}
+
+.star-rating--lg .star-rating-btn {
+  font-size: 2rem;
+  min-width: 48px;
+  min-height: 48px;
+}
+
+.star-rating-btn {
+  background: none;
+  border: none;
+  padding: 4px;
+  font-size: 1.25rem;
+  line-height: 1;
+  color: var(--border);
+  cursor: default;
+  font-family: inherit;
+}
+
+.star-rating--interactive .star-rating-btn {
+  cursor: pointer;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.star-rating-btn.active {
+  color: #e6a817;
+}
+
+.star-rating--interactive .star-rating-btn:active {
+  transform: scale(1.1);
+}
+
+/* Experience */
+.experience-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.experience-header h2 {
+  margin: 0;
+}
+
+.experience-summary {
+  margin: 0 0 12px;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.experience-summary-stars {
+  color: #e6a817;
+  letter-spacing: 1px;
+}
+
+.experience-empty {
+  margin: 0 0 12px;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.experience-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.experience-item {
+  padding: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.experience-item-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.experience-item-top time {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.experience-item-content {
+  margin: 0 0 8px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.experience-item-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.experience-delete {
+  color: var(--danger);
+}
+
+.experience-form-overlay {
+  z-index: 110;
+}
+
+.experience-form-sheet {
+  max-height: 90dvh;
+}
+
+.form-required {
+  color: var(--danger);
+}
+
 /* FAB */
 .fab {
   position: fixed;
