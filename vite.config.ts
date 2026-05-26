@@ -11,11 +11,11 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg'],
+      includeAssets: ['favicon.svg', 'apple-touch-icon.png'],
       manifest: {
-        name: '我的攻略',
-        short_name: '攻略',
-        description: '记录你的生活攻略与技巧',
+        name: '我的收藏夹',
+        short_name: '收藏夹',
+        description: '记录你的生活收藏与体验',
         theme_color: '#c45c26',
         background_color: '#faf8f5',
         display: 'standalone',

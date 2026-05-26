@@ -11,7 +11,7 @@ export function Layout() {
       <header className="header">
         {isHome ? (
           <div className="header-home">
-            <h1 className="header-title">我的攻略</h1>
+            <h1 className="header-title">我的收藏夹</h1>
             <BackupPanel />
           </div>
         ) : (
